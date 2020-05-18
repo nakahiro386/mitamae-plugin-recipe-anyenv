@@ -16,7 +16,7 @@ include_recipe 'anyenv'
 
 ### Node
 
-see [mrblib/mitamae/plugin/recipe/anyenv.rb](mrblib/mitamae/plugin/recipe/anyenv.rb)
+see [mrblib/mitamae/plugin/recipe/anyenv.yaml](mrblib/mitamae/plugin/recipe/anyenv.yaml)
 
 ## License
 MIT

@@ -99,6 +99,12 @@ node[:anyenv][:envs].each do |env, options|
     user node[:anyenv][:user]
     notifies :delete, "file[#{cache_home}/anyenv_cache]"
   end
+  if env == 'nodenv'
+    file "#{env_dir}/default-packages" do
+      action :create
+      user node[:anyenv][:user]
+    end
+  end
 
   directory "#{env_dir}/cache" do
     action :create

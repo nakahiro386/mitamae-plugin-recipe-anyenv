@@ -91,6 +91,9 @@ anyenv_init = <<-EOS
 EOS
 
 node[:anyenv][:envs].each do |env, options|
+  unless options[:install]
+    next
+  end
   env_dir = File.join(node[:anyenv][:anyenv_root], 'envs', env)
   execute  "#{anyenv_init} #{build_envs} #{anyenv_bin} install --skip-existing #{env}" do
     not_if "test -d #{env_dir}"

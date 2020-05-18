@@ -1,5 +1,8 @@
 packages = %w(git curl wget)
 node[:anyenv][:envs].each do |env, options|
+  unless options[:install_dependency]
+    next
+  end
   if env == 'pyenv'
     # Common build problems · pyenv/pyenv Wiki · GitHub
     # https://github.com/pyenv/pyenv/wiki/common-build-problems

@@ -14,6 +14,8 @@ anyenv:
     RUBY_CONFIGURE_OPTS: "--enable-shared"
   envs:
     pyenv:
+      install: true
+      install_dependency: true
       versions:
         - '3.7.4'
       global: '3.7.4'
@@ -25,6 +27,8 @@ anyenv:
         - 'https://github.com/pyenv/pyenv-virtualenv.git'
         - 'https://github.com/pyenv/pyenv-which-ext.git'
     rbenv:
+      install: true
+      install_dependency: true
       versions: []
       plugins:
         - 'https://github.com/momo-lab/xxenv-latest.git'

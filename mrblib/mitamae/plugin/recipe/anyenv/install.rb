@@ -12,20 +12,19 @@ directory File.join(node[:anyenv][:user_home], '.local', 'bin') do
   mode "775"
 end
 
-directory File.join(node[:anyenv][:user_home], '.cache') do
-  action :create
-  owner node[:anyenv][:user]
-  group node[:anyenv][:group]
-  mode "700"
-end
-
 config_home = ENV['XDG_CONFIG_HOME']
 config_home ||= File.join(node[:anyenv][:user_home], '.config')
-directory config_home do
-  action :create
-  owner node[:anyenv][:user]
-  group node[:anyenv][:group]
-  mode "700"
+
+cache_home = ENV['XDG_CACHE_HOME']
+cache_home ||= File.join(node[:anyenv][:user_home], '.cache')
+
+[config_home, cache_home].each do |dir|
+  directory dir do
+    action :create
+    owner node[:anyenv][:user]
+    group node[:anyenv][:group]
+    mode "700"
+  end
 end
 
 git node[:anyenv][:anyenv_root] do
@@ -50,7 +49,7 @@ if [ -x "#{anyenv_bin}" ] ; then
     export ANYENV_ROOT=#{node[:anyenv][:anyenv_root]};
     export PATH="$ANYENV_ROOT/bin:$PATH"
 
-    ANYENV_INIT_CACHE="${XDG_CACHE_HOME:-${HOME}/.cache}/.anyenv_cache"
+    ANYENV_INIT_CACHE="${XDG_CACHE_HOME:-${HOME}/.cache}/anyenv_cache"
     if [ -r "$ANYENV_INIT_CACHE" ] ; then
         source "$ANYENV_INIT_CACHE" 
     else
@@ -98,7 +97,9 @@ node[:anyenv][:envs].each do |env, options|
   execute  "#{anyenv_init} #{build_envs} #{anyenv_bin} install --skip-existing #{env}" do
     not_if "test -d #{env_dir}"
     user node[:anyenv][:user]
+    notifies :delete, "file[#{cache_home}/anyenv_cache]"
   end
+
   directory "#{env_dir}/cache" do
     action :create
     user node[:anyenv][:user]
@@ -127,3 +128,9 @@ node[:anyenv][:envs].each do |env, options|
   end
 
 end
+
+file "#{cache_home}/anyenv_cache" do
+  action :nothing
+  user node[:anyenv][:user]
+end
+

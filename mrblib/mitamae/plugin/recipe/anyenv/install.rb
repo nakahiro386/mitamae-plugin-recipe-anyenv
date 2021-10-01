@@ -53,7 +53,7 @@ if [ -x "#{anyenv_bin}" ] ; then
     if [ -r "$ANYENV_INIT_CACHE" ] ; then
         source "$ANYENV_INIT_CACHE" 
     else
-        anyenv init - bash --no-rehash > "$ANYENV_INIT_CACHE"
+        anyenv init - --no-rehash bash > "$ANYENV_INIT_CACHE"
         eval "$(anyenv init - bash)"
     fi
 fi
